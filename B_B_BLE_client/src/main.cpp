@@ -1,4 +1,6 @@
 #include <Arduino.h>
+
+/* This is modified code from the link below. It was modified to work with the Heltec ESP32 WIFI Board. */
 /*********
   Rui Santos
   Complete instructions at https://RandomNerdTutorials.com/esp32-ble-server-client/
