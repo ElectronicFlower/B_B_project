@@ -121,5 +121,5 @@ difference(){
     translate([3.175 , 37, -5]) screwHole (3.175,1.6,3.175,1.8);
     translate([28, 37, -5]) screwHole (3.175, 1.6, 3.175, 1.8);
 }
-translate([0,0,45]) DT();
+translate([0,0,45]) DHT();
 
