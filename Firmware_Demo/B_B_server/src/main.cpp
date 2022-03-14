@@ -15,6 +15,10 @@
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
+#include "U8x8lib.h"
+
+// Screen Setup 
+U8X8_SSD1306_128X64_NONAME_SW_I2C u8x8(/* clock=*/ 15, /* data=*/ 4, /* reset=*/ 16);
 
 //Default Temperature is in Celsius
 //Comment the next line for Temperature in Fahrenheit
@@ -71,6 +75,10 @@ void setup() {
   Serial.println(F("DHT22 test!"));
   dht.begin();
 
+  //Setup the screen
+  u8x8.begin();
+  u8x8.setFont(u8x8_font_chroma48medium8_r);
+
   // Create the BLE Device
   BLEDevice::init(bleServerName);
 
@@ -101,6 +109,7 @@ void setup() {
   pAdvertising->addServiceUUID(SERVICE_UUID);
   pServer->getAdvertising()->start();
   Serial.println("Waiting a client connection to notify...");
+  u8x8.drawString(0,0,"Wait.. Server");
 }
 
 void loop() {
@@ -121,6 +130,9 @@ void loop() {
         Serial.print("Temperature Celsius: ");
         Serial.print(temp); 
         Serial.print(" ºC\n");
+        u8x8.drawString(0,0,"Temperature:");
+        u8x8.drawString(1,1,temperatureCTemp);
+        u8x8.drawString(7,1," C");
       #else
         static char temperatureFTemp[6];
         dtostrf(tempF, 6, 2, temperatureFTemp);
@@ -130,6 +142,9 @@ void loop() {
         Serial.print("Temperature Fahrenheit: ");
         Serial.print(tempF);
         Serial.print(" ºF");
+        u8x8.drawString(0,0,"Temperature:");
+        u8x8.drawString(1,1,temperatureCTemp);
+        u8x8.drawString(7,1," F");
       #endif
 
       lastTime = millis();
