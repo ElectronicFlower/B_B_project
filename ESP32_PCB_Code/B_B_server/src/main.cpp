@@ -31,7 +31,6 @@ DHT dht(DHTPIN, DHTTYPE);
 
 float temp;
 float tempF;
-char tempchar[10];
 
 // Timer variables
 unsigned long lastTime = 0;
