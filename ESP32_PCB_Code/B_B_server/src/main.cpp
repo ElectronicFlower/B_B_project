@@ -31,7 +31,6 @@ DHT dht(DHTPIN, DHTTYPE);
 
 float temp;
 float tempF;
-float hum;
 char tempchar[10];
 
 // Timer variables
