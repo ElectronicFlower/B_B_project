@@ -105,18 +105,18 @@ class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
 void printReadings(){
   
   u8x8.drawString(0,0,"Temperature:");
-  u8x8.drawString(1,0,temperatureChar);
-  Serial.println("Temperature: ");
+  u8x8.drawString(0,1,temperatureChar);
+  Serial.print("Temperature: ");
   Serial.print(temperatureChar);
 
   #ifdef temperatureCelsius
     //Temperature Celsius
-    u8x8.drawString(1,2,"C");
-    Serial.print("C");
+    u8x8.drawString(7,1,"C");
+    Serial.println("C");
   #else
     //Temperature Fahrenheit
-    u8x8.drawString(1,2,"C");
-    Serial.print("F");
+    u8x8.drawString(7,1,"F");
+    Serial.println("F");
   #endif
 }
 
@@ -128,6 +128,7 @@ void setup() {
   //Start serial communication
   Serial.begin(9600);
   Serial.println("Starting Arduino BLE Client application...");
+  u8x8.drawString(0,0,"Wait..Client");
 
   //Init BLE device
   BLEDevice::init("");
