@@ -23,7 +23,7 @@
 //BLE server name
 #define bleServerName "DHT22_ESP32"
 
-#define DHTPIN 26
+#define DHTPIN 4
 
 #define DHTTYPE DHT22
 
