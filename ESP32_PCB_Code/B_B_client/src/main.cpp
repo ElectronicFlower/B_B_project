@@ -8,6 +8,12 @@
 #include <Wire.h>
 #include "U8x8lib.h"
 
+//For alert for high temperatures 
+#include <iostream>
+#include <cstdlib>
+
+double D_Temp;
+
 U8X8_SSD1306_128X64_NONAME_SW_I2C u8x8(/* clock=*/ 15, /* data=*/ 4, /* reset=*/ 16);
 
 //Default Temperature is in Celsius
@@ -161,6 +167,11 @@ void loop() {
   if (newTemperature){
     newTemperature = false;
     printReadings();
+    D_Temp = std::atof(temperatureChar);
+    std::cout << "num_double = " << D_Temp << std::endl;
+    if (D_Temp > 55){
+      u8x8.drawString(0,2,"High Temp!");
+    }
   }
   delay(1000); // Delay a second between loops.
 }
