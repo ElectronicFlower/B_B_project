@@ -4,17 +4,19 @@ $fn=50; // use either 50 or 100
 
 wallthickness=1.32; // this is the wall of the lip, the box is twice as thick
 
-internalx=33+5; // internal x dimension
+internalx=33+8; // internal x dimension
 
-internaly=41.61+5; // internal y dimension
+internaly=41.58+8; // internal y dimension
 
-internalz=1.5748+15; // internal overall z dimension
+internalz=1.57+15; // internal overall z dimension
 
 internal_lidz=5; // this is taken of off the internalz for the bottom height and acts as the lid internal height
 
 lip_overlap = internal_lidz/2; // how much overlap between box and lid
 
 lipspacing=0; // this amount is take off of the wall thickness on the lip to increase spacing, if your lid is too tight you can increase this but it will reduce the actual wall thickness on the lip so too much and you will have to increase the wallthickness to compensate. Should be 0 in ideal world, you will likely be better just lightly sanding the lip unless your printer is way out
+
+post_diameter = (3.175);
 
 // INTERNAL VARIABLES, DO NOT MODIFY
 internal_botz=internalz-internal_lidz;
@@ -100,7 +102,7 @@ color("#ADD8E6") union(){
         //Left Tab Screw Hole 
         translate([20, -5, 0]) screwHole (1,10,1,1);
         // Right Tab Screw Hole
-        translate([20, 55, 0]) screwHole (1,10,1,1);
+        translate([20, 58, 0]) screwHole (1,10,1,1);
     }
 }
 
@@ -112,14 +114,37 @@ difference(){
 
 //PCB Mock up
 module PCB(){
-color("green") translate([0 , 0, -5]) cube([31.75,40.64, 1.5748], center);
+color("green") translate([0 , 0, -5]) cube([33,41.58, 1.57], center);
 }
-difference(){
+translate ([6,4.2,10]) difference(){
     PCB();
-    translate([3.175 , 3.175, -5]) screwHole (3.175,1.6,3.175,1.8);
-    translate([28, 3.175, -5]) screwHole (3.175,1.6,3.175,1.8);
-    translate([3.175 , 37, -5]) screwHole (3.175,1.6,3.175,1.8);
-    translate([28, 37, -5]) screwHole (3.175, 1.6, 3.175, 1.8);
+    translate([3.175 , 3.175, -5]) screwHole ((3.175/2),1.6,(3.175/2),1.8);
+    translate([28, 3.175, -5]) screwHole ((3.175/2),1.6,(3.175/2),1.8);
+    translate([3.175 , 37, -5]) screwHole ((3.175/2),1.6,(3.175/2),1.8);
+    translate([28, 37, -5]) screwHole ((3.175/2), 1.6, (3.175/2), 1.8);
 }
 translate([0,0,45]) DHT();
 
+
+//supporting posts
+module posts(x,y,z,h,r){
+    translate([x,y,z]){
+    cylinder(r = r, h = h);
+    }
+    translate([-x, y, z]){
+    cylinder(r = r, h = h);
+    }
+    translate([-x, -y, z]){
+    cylinder(r = r, h = h);
+    }
+    translate([x, -y, z]){
+    cylinder(r =r, h = h);
+    }
+}
+translate ([22,25,0]) posts(
+    x=(26.67- post_diameter -11),
+    y=(35.56- post_diameter -15.5),
+    z=wallthickness-0.5,
+    h=(actual_botz - wallthickness - internal_lidz ),
+    r=((3.175/2)-0.25)
+);
