@@ -1,3 +1,8 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
 {
     "configurations": [
         {
@@ -5,6 +10,9 @@
             "includePath": [
                 "c:/Users/lucia/Documents/GitHub/B_B_project/Temp_H_Test/include",
                 "c:/Users/lucia/Documents/GitHub/B_B_project/Temp_H_Test/src",
+                "c:/Users/lucia/Documents/GitHub/B_B_project/Temp_H_Test/.pio/libdeps/heltec_wifi_kit_32/U8g2/src",
+                "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
+                "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src",
                 "c:/Users/lucia/Documents/GitHub/B_B_project/Temp_H_Test/.pio/libdeps/heltec_wifi_kit_32/DHT sensor library",
                 "c:/Users/lucia/Documents/GitHub/B_B_project/Temp_H_Test/.pio/libdeps/heltec_wifi_kit_32/Adafruit Unified Sensor",
                 "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/config",
@@ -70,7 +78,6 @@
                 "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/fb_gfx",
                 "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/cores/esp32",
                 "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/variants/heltec_wifi_kit_32",
-                "c:/Users/lucia/Documents/GitHub/B_B_project/Temp_H_Test/.pio/libdeps/heltec_wifi_kit_32/U8g2/src",
                 "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/ArduinoOTA/src",
                 "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/AsyncUDP/src",
                 "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/AzureIoT/src",
@@ -89,7 +96,6 @@
                 "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/Preferences/src",
                 "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/SD/src",
                 "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/SD_MMC/src",
-                "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src",
                 "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/SPIFFS/src",
                 "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/SimpleBLE/src",
                 "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/Ticker/src",
@@ -98,7 +104,6 @@
                 "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
                 "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/WiFiClientSecure/src",
                 "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/WiFiProv/src",
-                "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
                 ""
             ],
             "browse": {
@@ -106,6 +111,9 @@
                 "path": [
                     "c:/Users/lucia/Documents/GitHub/B_B_project/Temp_H_Test/include",
                     "c:/Users/lucia/Documents/GitHub/B_B_project/Temp_H_Test/src",
+                    "c:/Users/lucia/Documents/GitHub/B_B_project/Temp_H_Test/.pio/libdeps/heltec_wifi_kit_32/U8g2/src",
+                    "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
+                    "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src",
                     "c:/Users/lucia/Documents/GitHub/B_B_project/Temp_H_Test/.pio/libdeps/heltec_wifi_kit_32/DHT sensor library",
                     "c:/Users/lucia/Documents/GitHub/B_B_project/Temp_H_Test/.pio/libdeps/heltec_wifi_kit_32/Adafruit Unified Sensor",
                     "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/config",
@@ -171,7 +179,6 @@
                     "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/fb_gfx",
                     "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/cores/esp32",
                     "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/variants/heltec_wifi_kit_32",
-                    "c:/Users/lucia/Documents/GitHub/B_B_project/Temp_H_Test/.pio/libdeps/heltec_wifi_kit_32/U8g2/src",
                     "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/ArduinoOTA/src",
                     "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/AsyncUDP/src",
                     "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/AzureIoT/src",
@@ -190,7 +197,6 @@
                     "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/Preferences/src",
                     "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/SD/src",
                     "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/SD_MMC/src",
-                    "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src",
                     "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/SPIFFS/src",
                     "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/SimpleBLE/src",
                     "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/Ticker/src",
@@ -199,7 +205,6 @@
                     "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
                     "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/WiFiClientSecure/src",
                     "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/WiFiProv/src",
-                    "C:/Users/lucia/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
                     ""
                 ]
             },
