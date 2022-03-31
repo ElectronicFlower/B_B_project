@@ -17,7 +17,7 @@
 #include <DHT.h>
 
 //Time definition for Deep Sleep
-#define uS_TO_S_FACTOR 1000000  /* Conversion factor for micro seconds to seconds */
+#define uS_TO_S_FACTOR 1000  /* Conversion factor for micro seconds to seconds */
 #define TIME_TO_SLEEP  5        /* Time ESP32 will go to sleep (in seconds) */
 
 //RTC Storage
@@ -89,7 +89,7 @@ void print_wakeup_reason(){
 
 void setup() {
 
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println(F("DHT22 test!"));
   dht.begin();
 
