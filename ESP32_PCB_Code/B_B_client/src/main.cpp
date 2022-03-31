@@ -23,6 +23,13 @@ U8X8_SSD1306_128X64_NONAME_SW_I2C u8x8(/* clock=*/ 15, /* data=*/ 4, /* reset=*/
 //BLE Server name (the other ESP32 name running the server sketch)
 #define bleServerName "DHT22_ESP32"
 
+//For Deep sleep time definition that will match the deep sleep of the server.  
+#define uS_TO_S_FACTOR 1000000  /* Conversion factor for micro seconds to seconds */
+#define TIME_TO_SLEEP  5        /* Time ESP32 will go to sleep (in seconds) */
+
+//Number of boots init
+RTC_DATA_ATTR int bootCount = 0;
+
 /* UUID's of the service, characteristic that we want to read*/
 // BLE Service
 static BLEUUID bmeServiceUUID("91bad492-b950-4226-aa2b-4ede9fa42f59");
@@ -39,6 +46,8 @@ static BLEUUID bmeServiceUUID("91bad492-b950-4226-aa2b-4ede9fa42f59");
 //Flags stating if should begin connecting and if the connection is up
 static boolean doConnect = false;
 static boolean connected = false;
+static boolean mem_connect = false;
+////static boolean live_con = false;
 
 //Address of the peripheral device. Address will be found during scanning...
 static BLEAddress *pServerAddress;
@@ -56,6 +65,23 @@ char* humidityChar;
 
 //Flags to check whether new temperature and humidity readings are available
 boolean newTemperature = false;
+
+//Printing the reason for wakeup function declaration
+void print_wakeup_reason(){
+  esp_sleep_wakeup_cause_t wakeup_reason;
+
+  wakeup_reason = esp_sleep_get_wakeup_cause();
+
+  switch(wakeup_reason)
+  {
+    case ESP_SLEEP_WAKEUP_EXT0 : Serial.println("Wakeup caused by external signal using RTC_IO"); break;
+    case ESP_SLEEP_WAKEUP_EXT1 : Serial.println("Wakeup caused by external signal using RTC_CNTL"); break;
+    case ESP_SLEEP_WAKEUP_TIMER : Serial.println("Wakeup caused by timer"); break;
+    case ESP_SLEEP_WAKEUP_TOUCHPAD : Serial.println("Wakeup caused by touchpad"); break;
+    case ESP_SLEEP_WAKEUP_ULP : Serial.println("Wakeup caused by ULP program"); break;
+    default : Serial.printf("Wakeup was not caused by deep sleep: %d\n",wakeup_reason); break;
+  }
+}
 
 //When the BLE Server sends a new temperature reading with the notify property
 static void temperatureNotifyCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, 
@@ -124,6 +150,7 @@ void printReadings(){
     u8x8.drawString(7,1,"F");
     Serial.println("F");
   #endif
+  delay(2000);
 }
 
 void setup() {
@@ -135,6 +162,13 @@ void setup() {
   Serial.begin(9600);
   Serial.println("Starting Arduino BLE Client application...");
   u8x8.drawString(0,0,"Wait..Client");
+  
+  //Increment boot number and print it every reboot
+  ++bootCount;
+  Serial.println("Boot number: " + String(bootCount));
+
+  //Print the wakeup reason for ESP32
+  print_wakeup_reason();
 
   //Init BLE device
   BLEDevice::init("");
@@ -146,14 +180,17 @@ void setup() {
   pBLEScan->setAdvertisedDeviceCallbacks(new MyAdvertisedDeviceCallbacks());
   pBLEScan->setActiveScan(true);
   pBLEScan->start(30);
-}
 
-void loop() {
-  // If the flag "doConnect" is true then we have scanned for and found the desired
+    // If the flag "doConnect" is true then we have scanned for and found the desired
   // BLE Server with which we wish to connect.  Now we connect to it.  Once we are
   // connected we set the connected flag to be true.
-  if (doConnect == true) {
+
+  //Add loop to check if still connected 
+  do{  
+    if (doConnect == true) {
+    mem_connect = doConnect;
     if (connectToServer(*pServerAddress)) {
+      ////live_con = true;
       Serial.println("We are now connected to the BLE Server.");
       //Activate the Notify property of each Characteristic
       temperatureCharacteristic->getDescriptor(BLEUUID((uint16_t)0x2902))->writeValue((uint8_t*)notificationOn, 2, true);
@@ -173,5 +210,30 @@ void loop() {
       u8x8.drawString(0,2,"High Temp!");
     }
   }
-  delay(1000); // Delay a second between loops.
+  delay(10000);}while (mem_connect == connected);
+ // Delay a second between loops.
+  /*
+  First we configure the wake up source
+  We set our ESP32 to wake up every 5 seconds
+  */
+  esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
+  Serial.println("Setup ESP32 to sleep for every " + String(TIME_TO_SLEEP) +
+  " Seconds");
+
+   /*
+  Now that we have setup a wake cause and if needed setup the
+  peripherals state in deep sleep, we can now start going to
+  deep sleep.
+  In the case that no wake up sources were provided but deep
+  sleep was started, it will sleep forever unless hardware
+  reset occurs.
+  */
+  Serial.println("Going to sleep now");
+  delay(1000);
+  Serial.flush(); 
+  esp_deep_sleep_start();
+  Serial.println("This will never be printed");
+}
+
+void loop() {
 }
