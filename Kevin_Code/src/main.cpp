@@ -11,6 +11,7 @@
 #include <BLEUtils.h>
 #include <BLE2902.h>
 #include <Wire.h>
+#include <Adafruit_Sensor.h>
 #include <DHT.h>
 #include <U8x8lib.h>
 #include <EEPROM.h>
@@ -30,8 +31,11 @@ DHT dht(DHTPIN, DHTTYPE);
 // Comment the next line for Temperature in Fahrenheit
 #define temperatureCelsius
 
-// BLE server name
+// BLE Device Name
 #define DEVICE_MODEL "NuvIoT Temperature "
+
+//BLE Server Name - Without MAC
+#define bleServerName "NuvIoT Temp Sensor"
 
 U8X8_SSD1306_128X64_NONAME_SW_I2C u8x8(/* clock=*/15, /* data=*/4, /* reset=*/16);
 
@@ -58,9 +62,11 @@ BLECharacteristic dhtTemperatureFahrenheitCharacteristics("f78ebbff-c8b7-4107-93
 BLEDescriptor dhtTemperatureFahrenheitDescriptor(BLEUUID((uint16_t)0x2902));
 #endif
 
+/*
 // Humidity Characteristic and Descriptor
 BLECharacteristic dhtHumidityCharacteristics("ca73b3ba-39f6-4ab3-91ae-186dc9577d99", BLECharacteristic::PROPERTY_NOTIFY);
 BLEDescriptor dhtHumidityDescriptor(BLEUUID((uint16_t)0x2903));
+*/
 
 // Setup callbacks onConnect and onDisconnect
 class MyServerCallbacks : public BLEServerCallbacks
@@ -74,13 +80,6 @@ class MyServerCallbacks : public BLEServerCallbacks
     deviceConnected = false;
   }
 };
-
-/*void initBME(){
-  if (!bme.begin(0x76)) {
-    Serial.println("Could not find a valid BME280 sensor, check wiring!");
-    while (1);
-  }
-}*/
 
 
 String getUniqueId() {
@@ -97,14 +96,15 @@ void setup()
   // Start serial communication
   Serial.begin(115200);
 
-
+//Optional LCD Screen
 #ifdef LCD
   u8x8.begin();
   u8x8.setFont(u8x8_font_chroma48medium8_r);
 #endif
 
   // Create the BLE Device
-  BLEDevice::init((String(DEVICE_MODEL) + getUniqueId()).c_str());
+  //BLEDevice::init((String(DEVICE_MODEL) + getUniqueId()).c_str());
+  BLEDevice::init(bleServerName);
 
   // Create the BLE Server
   BLEServer *pServer = BLEDevice::createServer();
@@ -124,12 +124,12 @@ void setup()
   dhtTemperatureFahrenheitDescriptor.setValue("DHT temperature Fahrenheit");
   dhtTemperatureFahrenheitCharacteristics.addDescriptor(&dhtTemperatureFahrenheitDescriptor);
 #endif
-
+/*
   // Humidity
   dhtService->addCharacteristic(&dhtHumidityCharacteristics);
   dhtHumidityDescriptor.setValue("DHT humidity");
   dhtHumidityCharacteristics.addDescriptor(new BLE2902());
-
+*/
   pinMode(LED_PIN, OUTPUT);
 
   // Start the service

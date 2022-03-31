@@ -15,7 +15,7 @@ U8X8_SSD1306_128X64_NONAME_SW_I2C u8x8(/* clock=*/ 15, /* data=*/ 4, /* reset=*/
 #define temperatureCelsius
 
 //BLE Server name (the other ESP32 name running the server sketch)
-#define bleServerName "DHT22_ESP32"
+#define bleServerName "NuvIoT Temp Sensor"
 
 /* UUID's of the service, characteristic that we want to read*/
 // BLE Service
