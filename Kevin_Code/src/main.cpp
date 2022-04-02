@@ -94,7 +94,7 @@ String getUniqueId() {
 void setup()
 {
   // Start serial communication
-  Serial.begin(115200);
+  Serial.begin(9600);
 
 //Optional LCD Screen
 #ifdef LCD
@@ -172,7 +172,7 @@ void loop()
     dtostrf(temp, 6, 2, temperatureCTemp);
     Serial.print("Temperature Celsius: ");
     Serial.print(temp);
-    Serial.print(" ÂºC\n");
+    Serial.print(" ºC\n");
   }
 
   if (deviceConnected)
