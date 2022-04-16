@@ -9,6 +9,10 @@
 #define DHTPIN 4
 DHT dht(DHTPIN, DHTTYPE);
 
+//led definitions
+#define pinLED 22
+uint8_t led_toggle = 0;
+
 //Deep
 #define SLEEP_SECS 5 // 5 secs
 #define SEND_TIMEOUT 245  // 245 millis seconds timeout 
