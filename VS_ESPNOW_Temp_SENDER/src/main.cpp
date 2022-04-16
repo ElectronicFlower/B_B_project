@@ -1,36 +1,28 @@
-/*
-  Rui Santos
-  Complete project details at https://RandomNerdTutorials.com/esp-now-two-way-communication-esp32/
-  
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files.
-  
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-*/
-// SENDER
 #include <esp_now.h>
 #include <WiFi.h>
-
 #include <Wire.h>
 #include "DHT.h"
 
-//#define SCREEN_WIDTH 128  // OLED display width, in pixels
-//#define SCREEN_HEIGHT 64  // OLED display height, in pixels
+//led definitions
+#define pinLED 22
+uint8_t led_toggle = 0;
+
+//DHT definitions
 #define DHTTYPE DHT22
 #define DHTPIN 4
 
 DHT dht(DHTPIN, DHTTYPE);
 
+//Timer definitions
+#define SLEEP_SECS 5 // 5 mins
+#define SEND_TIMEOUT 245  // 245 millis seconds timeout 
 
 // REPLACE WITH THE MAC Address of your receiver 
-uint8_t broadcastAddress[] = {0x7C, 0x9E, 0xBD, 0x5B, 0x33, 0x20};
+uint8_t broadcastAddress[] = {0x7C, 0x9E, 0xBD, 0x5B, 0x9B, 0x20};
 
 // Define variables to store DHT readings to be sent
 float temperature;
 float humidity;
-// Define variables to store incoming readings
-
 
 // Variable to store if sending data was successful
 String success;
@@ -50,6 +42,9 @@ struct_message dhtReadings;
 
 esp_now_peer_info_t peerInfo;
 
+//Deep sleep callback 
+volatile boolean callbackCalled;
+
 // Callback when data is sent
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   Serial.print("\r\nLast Packet Send Status:\t");
@@ -62,26 +57,41 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   }
 }
 
-// Callback when data is received
+void updateDisplay(){
+  // Display Readings on OLED Display
 
+  
+  // Display Readings in Serial Monitor
+  Serial.print(F("Humidity: "));
+  Serial.print(humidity);
+  Serial.print(F("%  Temperature: "));
+  Serial.print(temperature);
+  Serial.print(F("°C "));
+  //Serial.print(f);
+}
+
+void gotoSleep(){
+  Serial.printf("Up for %i ms, going to sleep for %i secs...\n", millis(), SLEEP_SECS); 
+  ESP.deepSleep(SLEEP_SECS * 1000000);
+}
  
 void setup() {
   // Init Serial Monitor
   Serial.begin(115200);
-  Serial.println(F("DHTxx test!"));
+  Serial.println(F("Begin"));
   // Init DHT sensor
   dht.begin();
-
-  // Init OLED display
-
  
   // Set device as a Wi-Fi Station
   WiFi.mode(WIFI_STA);
 
+  //Deep sleep
+  WiFi.disconnect();
+
   // Init ESP-NOW
   if (esp_now_init() != ESP_OK) {
     Serial.println("Error initializing ESP-NOW");
-    return;
+    gotoSleep();//Deep sleep if error
   }
 
   // Once ESPNow is successfully Init, we will register for Send CB to
@@ -98,14 +108,28 @@ void setup() {
     Serial.println("Failed to add peer");
     return;
   }
+  
+  //Setup of the LED light on pcb
+  pinMode(pinLED, OUTPUT);
+
   // Register for a callback function that will be called when data is received
   //esp_now_register_recv_cb(OnDataRecv);
 }
  
 void loop() {
+  //led will toggle whenever we are within the loop
+  led_toggle = led_toggle == 0 ? 1 : 0;
+  digitalWrite(22, led_toggle);
+
+  //Go to sleep
+  if (callbackCalled || (millis() > SEND_TIMEOUT)) {
+    gotoSleep();
+  }
+
   // Wait a few seconds between measurements.
   delay(2000);
-  getReadings();
+  temperature=dht.readTemperature();
+  humidity=dht.readHumidity();
  
   // Set values to send
   dhtReadings.temp=temperature;
@@ -124,31 +148,4 @@ void loop() {
   }
   updateDisplay();
   delay(10000);
-  }
-  
-void getReadings(){
-  humidity = dht.readHumidity();
-  // Read temperature as Celsius (the default)
-  temperature = dht.readTemperature();
-  // Read temperature as Fahrenheit (isFahrenheit = true)
-  //float f = dht.readTemperature(true);
-
-  // Check if any reads failed and exit early (to try again).
-  if (isnan(humidity) || isnan(temperature)) {
-    Serial.println(F("Failed to read from DHT sensor!"));
-    return;
-  }
-}
-
-void updateDisplay(){
-  // Display Readings on OLED Display
-
-  
-  // Display Readings in Serial Monitor
-  Serial.print(F("Humidity: "));
-  Serial.print(humidity);
-  Serial.print(F("%  Temperature: "));
-  Serial.print(temperature);
-  Serial.print(F("°C "));
-  //Serial.print(f);
 }
