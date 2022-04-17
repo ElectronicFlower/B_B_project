@@ -1,5 +1,4 @@
-//measurements are in mm 
-
+//Measurements are in mm 
 $fn=100; // use either 50 or 100 
 
 //PCB measurements 
@@ -27,9 +26,7 @@ internaly=(76.2-5.3); // internal y dimension
 internalz=(38-5.5); // internal overall z dimension
 
 internal_lidz=5; // this is taken of off the internalz for the bottom height and acts as the lid internal height
-
 lip_overlap = internal_lidz/2 ; // how much overlap between box and lid
-
 lipspacing=0.5; // this amount is take off of the wall thickness on the lip to increase spacing, if your lid is too tight you can increase this but it will reduce the actual wall thickness on the lip so too much and you will have to increase the wallthickness to compensate. Should be 0 in ideal world, you will likely be better just lightly sanding the lip unless your printer is way out
 
 // INTERNAL VARIABLES, DO NOT MODIFY
@@ -47,7 +44,6 @@ tab_height=10;
 screw_diameter=3.4; 
 screw_x=(actual_x/2); //to translate screw hole
 screw_y=(tab_height/2);
-
 module lid() {
     difference() {
         scale([actual_x,actual_y,actual_lidz+lip_overlap])cube(1);
@@ -70,7 +66,6 @@ module figure(){
     polygon([[29,24],[29,12],[39,12],[35,17]]);
     polygon([[28,24],[28,12],[18,12]]);
     }
-//vent
 module vent(){
     translate([10.5,4,actual_botz + lip_overlap + 2]) cube([16.35+1, 7.35+1,actual_lidz+50]);
 }
@@ -92,19 +87,14 @@ module PCB(){
     union(){
         difference(){
             color("green") cube([PCB_x,PCB_y, PCB_z], center);
-            
             translate([1.6 , 1.6, 0]) screwHole ((3.175/2),PCB_z,0,0);
-            
             translate([1.6, 39.1, 0]) screwHole ((3.175/2),PCB_z,0, 0);
-            
             translate([30.2 , 1.6, 0]) screwHole ((3.175/2),PCB_z,0,0);
-            
-            translate([30.2, 39.1, 0]) screwHole ((3.175/2), PCB_z, 0, 0);           
-}
-
-//area where DHT goes
-   translate([10.5,2.5,0]) color("Black") cube([15.2,7.9, PCB_z+0.5], center=false);
-}
+            translate([30.2, 39.1, 0]) screwHole ((3.175/2), PCB_z, 0, 0);        
+        }
+    //area where DHT goes
+       translate([10.5,2.5,0]) color("Black") cube([15.2,7.9, PCB_z+0.5], center=false);
+    }
 }
 
 translate([9.49-1,17.69-2,(actual_lidz+actual_botz-PCB_z)]) PCB();
@@ -155,7 +145,6 @@ module lid_posts(){
         translate([0,0,actual_lidz+actual_botz+.1]) support_posts();
     }
 }
-
 union(){
     rotate([0,0,180]) translate([(-actual_x-31)/2,-actual_y+2,47.5]) name();
 
@@ -197,7 +186,6 @@ module BatteryHolder(){
  
 translate([8.59, 9.14,wallthickness]) BatteryHolder();
  
-
 //Calling the bottom and tabs module and joining then cutting screw holes
 color("#ADD8E6") union(){
     bottom();
