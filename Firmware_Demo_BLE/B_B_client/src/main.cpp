@@ -14,8 +14,11 @@ U8X8_SSD1306_128X64_NONAME_SW_I2C u8x8(/* clock=*/ 15, /* data=*/ 4, /* reset=*/
 //Comment the next line for Temperature in Fahrenheit
 #define temperatureCelsius
 
+//Temperature High alert
+int temp_alert=55;
+
 //BLE Server name (the other ESP32 name running the server sketch)
-#define bleServerName "DHT22_ESP32"
+#define bleServerName "NuvIoT Temperature 138B6C"
 
 /* UUID's of the service, characteristic that we want to read*/
 // BLE Service
@@ -37,7 +40,7 @@ static boolean connected = false;
 //Address of the peripheral device. Address will be found during scanning...
 static BLEAddress *pServerAddress;
  
-//Characteristicd that we want to read
+//Characteristic that we want to read
 static BLERemoteCharacteristic* temperatureCharacteristic;
 
 //Activate notify
@@ -159,8 +162,15 @@ void loop() {
   }
   //if new temperature readings are available, print in the OLED
   if (newTemperature){
+    float temp=atof(temperatureChar);
     newTemperature = false;
     printReadings();
+    if (temp>temp_alert){
+      u8x8.drawString(0,5,"HIGH TEMP!!!");
+    }
+    else {
+      u8x8.drawString(0,5,"               ");
+    }
   }
   delay(1000); // Delay a second between loops.
 }
