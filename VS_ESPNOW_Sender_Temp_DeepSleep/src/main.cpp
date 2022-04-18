@@ -43,9 +43,6 @@ volatile boolean callbackCalled;
 // Create a struct_message called DHTReadings to hold sensor readings
 struct_message dhtReadings;
 
-// Create a struct_message to hold incoming sensor readings
-//struct_message incomingReadings;
-
 esp_now_peer_info_t peerInfo;
 
 // Callback when data is sent
@@ -115,8 +112,6 @@ void setup() {
 
   //Setup of the LED light on pcb
   pinMode(pinLED, OUTPUT);
-  // Register for a callback function that will be called when data is received
-  //esp_now_register_recv_cb(OnDataRecv);
 }
  
 void loop() {
@@ -134,9 +129,6 @@ void loop() {
   // Set values to send
   dhtReadings.temp=temperature;
   dhtReadings.hum=humidity;
-
-  // Reading temperature or humidity takes about 250 milliseconds!
-  // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
 
   // Send message via ESP-NOW
   esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &dhtReadings, sizeof(dhtReadings));
